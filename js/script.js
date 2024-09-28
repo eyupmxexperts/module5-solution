@@ -63,53 +63,45 @@ var switchMenuToActive = function () {
 // On page load (before images or CSS)
 document.addEventListener("DOMContentLoaded", function (event) {
 
-// TODO: STEP 0: Look over the code from
-// *** start ***
-// to
-// *** finish ***
-// below.
-// We changed this code to retrieve all categories from the server instead of
-// simply requesting home HTML snippet. We now also have another function
-// called buildAndShowHomeHTML that will receive all the categories from the server
-// and process them: choose random category, retrieve home HTML snippet, insert that
-// random category into the home HTML snippet, and then insert that snippet into our
-// main page (index.html).
-//
-// TODO: STEP 1: Substitute [...] below with the *value* of the function buildAndShowHomeHTML,
-// so it can be called when server responds with the categories data.
+  // *** start ***
+  // On first load, show home view
+  showLoading("#main-content");
 
-// *** start ***
-// On first load, show home view
-showLoading("#main-content");
-$ajaxUtils.sendGetRequest(
-  allCategoriesUrl,
-  buildAndShowHomeHTML, // ***** <---- TODO: STEP 1: Substitute [...] ******
-  true); // Explicitly setting the flag to get JSON from server processed into an object literal
+  // Fetch all categories from the server
+  $ajaxUtils.sendGetRequest(
+    allCategoriesUrl,
+    buildAndShowHomeHTML, // ***** STEP 1: Function to handle the response ******
+    true); // Explicitly setting the flag to get JSON from server processed into an object literal
 });
 // *** finish **
 
+
+// Builds HTML for the home page based on categories array
+// returned from the server.
+function buildAndShowHomeHTML(categories) {
+  // Load home snippet page
   $ajaxUtils.sendGetRequest(
     homeHtmlUrl,
     function (homeHtml) {
-      // Kies een willekeurige categorie
+      // Choose a random category from the list of categories
       var chosenCategoryShortName = chooseRandomCategory(categories).short_name;
 
-      // Vervang {{randomCategoryShortName}} in de HTML
+      // Substitute {{randomCategoryShortName}} in the home HTML snippet
       var homeHtmlToInsertIntoMainPage = insertProperty(homeHtml, "randomCategoryShortName", "'" + chosenCategoryShortName + "'");
 
-      // Voeg de bijgewerkte HTML in op de pagina
+      // Insert the updated HTML into the main page
       insertHtml("#main-content", homeHtmlToInsertIntoMainPage);
     },
-    false); // Sluit correct af, zonder extra afsluitingen.
-
+    false); // False here because we're getting regular HTML, no need to process JSON
+}
 
 
 // Given array of category objects, returns a random category object.
-function chooseRandomCategory (categories) {
-  // Choose a random index into the array (from 0 inclusively until array length (exclusively))
+function chooseRandomCategory(categories) {
+  // Choose a random index in the array (from 0 inclusive until array length exclusive)
   var randomArrayIndex = Math.floor(Math.random() * categories.length);
 
-  // return category object with that randomArrayIndex
+  // Return the category object at that random index
   return categories[randomArrayIndex];
 }
 
