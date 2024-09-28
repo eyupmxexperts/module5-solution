@@ -88,18 +88,6 @@ $ajaxUtils.sendGetRequest(
 });
 // *** finish **
 
-
-// Builds HTML for the home page based on categories array
-// returned from the server.
-function buildAndShowHomeHTML (categories) {
-
-  // Load home snippet page
-  $ajaxUtils.sendGetRequest(
-    homeHtmlUrl,
-    function (homeHtml) {
-
-   function buildAndShowHomeHTML(categories) {
-  // Load home snippet page
   $ajaxUtils.sendGetRequest(
     homeHtmlUrl,
     function (homeHtml) {
@@ -112,12 +100,8 @@ function buildAndShowHomeHTML (categories) {
       // Voeg de bijgewerkte HTML in op de pagina
       insertHtml("#main-content", homeHtmlToInsertIntoMainPage);
     },
-    false);
+    false); // Sluit correct af, zonder extra afsluitingen.
 
-
-    },
-    false); // False here because we are getting just regular HTML from the server, so no need to process JSON.
-}
 
 
 // Given array of category objects, returns a random category object.
